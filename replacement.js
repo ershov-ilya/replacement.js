@@ -92,11 +92,14 @@
         console.log(config);
         console.log('GET array:');
         console.log(GET);
+        console.log('utm_keys array:');
+        console.log(utm_keys);
 
         return true;
     };
 
     PUBLIC.init = function(init_config) {
+        $(document).on('content-change do-replacement',replacement);
         var need_refresh=false;
         if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
         config = $.extend({}, config, init_config);
@@ -125,8 +128,6 @@
                 load();
             }
         }
-
-        $(document).on('content-change do-replacement',replacement);
     };
 
 	return PUBLIC;
