@@ -1,10 +1,25 @@
 ﻿var Replacement = (function(){
+    var DEBUG=true;
 	var PUBLIC={};
     var config={
-        url:'demo/data.json'
+        url:'demo/data.json',
+        utm_keys:['city']
     };
 
-   PUBLIC.parseGET = function(url){
+    var GET={};
+    var data={};
+
+    function request(){
+        if(DEBUG) console.log('request()');
+
+    }
+
+    function parseAnswer(){
+        if(DEBUG) console.log('parseAnswer()');
+
+    }
+
+    function parseGET (url){
         utm_keys=config.utm_keys;
         if(!url || url == '') url = decodeURI(document.location.search);
         if(url.indexOf('?') < 0) return {};
@@ -49,9 +64,29 @@
         return (GET);
     };
 
+    PUBLIC.test=function(){
+        if(!DEBUG) return false;
+        console.log('config array:');
+        console.log(config);
+        console.log('GET array:');
+        console.log(GET);
+
+        return true;
+    };
+
     PUBLIC.init = function(init_config) {
         if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
         config = $.extend({}, config, init_config);
+        GET=parseGET();
+        if($.isEmptyObject(GET)){
+            // Load
+            if(typeof localStorage['replacement-get'] != 'undefined'){ GET = JSON.parse(localStorage['replacement-get']);}
+        }else{
+            // Save
+            localStorage['replacement-get']=JSON.stringify(GET);
+        }
+
+
     };
 
 	return PUBLIC;
