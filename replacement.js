@@ -97,18 +97,24 @@
     };
 
     PUBLIC.init = function(init_config) {
+        var need_refresh=false;
         if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
         config = $.extend({}, config, init_config);
+
         GET=parseGET();
         if($.isEmptyObject(GET)){
             // Load
             if(typeof localStorage['replacement-get'] != 'undefined'){ GET = JSON.parse(localStorage['replacement-get']);}
         }else{
             // Save
-            localStorage['replacement-get']=JSON.stringify(GET);
+            var json_get=JSON.stringify(GET);
+            if(json_get!=localStorage['replacement-get']) {
+                localStorage['replacement-get'] = json_get;
+                need_refresh = true;
+            }
         }
 
-        if(typeof localStorage['replacement-data'] == 'undefined'){
+        if(typeof localStorage['replacement-data'] == 'undefined' || need_refresh){
             request();
         }else{
             var curtime=new Date().getTime();
