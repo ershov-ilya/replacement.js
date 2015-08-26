@@ -2,21 +2,43 @@
     var DEBUG=true;
 	var PUBLIC={};
     var config={
-        url:'demo/data.json',
+        url:'data.json',
         utm_keys:['city']
     };
 
     var GET={};
     var data={};
 
-    function request(){
-        if(DEBUG) console.log('request()');
-
+    function request(callback){
+        if (DEBUG) console.log('Загружаем новые данные');
+        $.ajax({
+            url:config.url,
+            id:0
+        }).success(function(response){
+            if(DEBUG) console.log('parseAnswer()');
+            if(typeof response == 'string') response=JSON.parse(response);
+            if(DEBUG) console.log(response);
+            data=response;
+            save();
+            $(document).trigger('do-replacement');
+        });
     }
 
-    function parseAnswer(){
-        if(DEBUG) console.log('parseAnswer()');
+    function save(){
+        var str=JSON.stringify(data);
+        localStorage['replacement-data']=str;
+        var time=new Date().getTime();
+        localStorage['replacement-time']=time;
+    }
 
+    function load(){
+        if (DEBUG) console.log('Используем старые данные');
+        data=JSON.parse(localStorage['replacement-data']);
+        $(document).trigger('do-replacement');
+    }
+
+    function replacement(){
+        if(DEBUG) console.log('replacement()');
     }
 
     function parseGET (url){
@@ -86,7 +108,19 @@
             localStorage['replacement-get']=JSON.stringify(GET);
         }
 
+        if(typeof localStorage['replacement-data'] == 'undefined'){
+            request();
+        }else{
+            var curtime=new Date().getTime();
+            var datatime=localStorage['replacement-time'];
+            if((curtime-datatime)>30000){
+                request();
+            }else{
+                load();
+            }
+        }
 
+        $(document).on('content-change do-replacement',replacement);
     };
 
 	return PUBLIC;
