@@ -4,7 +4,7 @@
         url:'demo/data.json'
     };
 
-   PUBLIC.parseUTM = function(url){
+   PUBLIC.parseGET = function(url){
         utm_keys=config.utm_keys;
         if(!url || url == '') url = decodeURI(document.location.search);
         if(url.indexOf('?') < 0) return {};
