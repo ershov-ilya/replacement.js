@@ -1,5 +1,8 @@
-﻿var REPLACER = (function(){
+﻿var Replacement = (function(){
 	var PUBLIC={};
+    var config={
+        url:'demo/data.json'
+    };
 
    PUBLIC.parseUTM = function(url){
         utm_keys=config.utm_keys;
@@ -44,6 +47,11 @@
         if(window.location.hash) new_url+=window.location.hash;
         if(config.utm_redirect) window.history.pushState(window.history.state, '', new_url);
         return (GET);
+    };
+
+    PUBLIC.init = function(init_config) {
+        if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
+        config = $.extend({}, config, init_config);
     };
 
 	return PUBLIC;
