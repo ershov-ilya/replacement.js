@@ -1,9 +1,10 @@
 ﻿var Replacement = (function(){
-    var DEBUG=true,
+    var DEBUG=false,
 	PUBLIC={},
     config={
         url:'data.json',
-        utm_keys:['city']
+        utm_keys:['city'],
+        skip_empty: true
     };
 
     var GET={},
@@ -52,6 +53,8 @@
         // Parsing CONTEXT
         var map = config.map;
         for(k in map){
+            if(typeof CONTEXT[map[k]] == 'undefined') continue;
+            if(config.skip_empty && CONTEXT[map[k]] == '') continue;
             console.log(k+' : '+CONTEXT[map[k]]);
             $(k).html(CONTEXT[map[k]]);
         }
