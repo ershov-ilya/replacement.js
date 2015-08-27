@@ -19,7 +19,6 @@
         }).success(function(response){
             if(DEBUG) console.log('parseAnswer()');
             if(typeof response == 'string') response=JSON.parse(response);
-            if(DEBUG) console.log(response);
             DATA=response;
             save();
             $(document).trigger('do-replacement');
@@ -41,13 +40,20 @@
 
     function replacement(){
         if(DEBUG) console.log('replacement()');
-        // Выбор контекста
+        // CONTEXT select
         for(k in DATA){
             if(typeof DATA[k][index] != 'undefined'){
                 if(DATA[k][index]==GET[key]){
                     CONTEXT=DATA[k];
                 }
             }
+        }
+
+        // Parsing CONTEXT
+        var map = config.map;
+        for(k in map){
+            console.log(k+' : '+CONTEXT[map[k]]);
+            $(k).html(CONTEXT[map[k]]);
         }
     }
 

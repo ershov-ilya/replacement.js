@@ -13,8 +13,11 @@
   <div class="container">
       <div class="row">
           <div class="col-xs-12">
-              <h1 class="replacement-header">Заголовок</h1>
+              <h1 id="replacement-header">Заголовок</h1>
               <p>Параграф текста со вставкой контактного телефона <span class="replacement-phone">+7(900) 876-54-32</span></p>
+              <footer>
+                  <strong class="replacement-phone">+7(900) 876-54-32</strong>
+              </footer>
           </div>
       </div>
   </div>
@@ -29,8 +32,8 @@
                     'city' : 'code'
                 },
                 map:{
-                    'replacement-header' : 'in_city',
-                    'replacement-phone' : 'phone'
+                    '#replacement-header' : 'in_city',
+                    '.replacement-phone' : 'phone'
                 },
                 skip_empty: true
             };
