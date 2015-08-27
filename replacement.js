@@ -1,5 +1,5 @@
 ﻿var Replacement = (function(){
-    var DEBUG=false,
+    var DEBUG=true,
 	PUBLIC={},
     config={
         url:'data.json',
@@ -12,7 +12,7 @@
     CONTEXT={},
     key,index;
 
-    function request(callback){
+    function request(){
         if (DEBUG) console.log('Загружаем новые данные');
         $.ajax({
             url:config.url,
@@ -22,6 +22,7 @@
             if(typeof response == 'string') response=JSON.parse(response);
             DATA=response;
             save();
+            findContext();
             $(document).trigger('do-replacement');
         });
     }
@@ -36,12 +37,12 @@
     function load(){
         if (DEBUG) console.log('Используем старые данные');
         DATA=JSON.parse(localStorage['replacement-data']);
+        findContext();
         $(document).trigger('do-replacement');
     }
 
-    function replacement(){
-        if(DEBUG) console.log('replacement()');
-        // CONTEXT select
+    function findContext(){
+        if(DEBUG) console.log('findContext()');
         for(k in DATA){
             if(typeof DATA[k][index] != 'undefined'){
                 if(DATA[k][index]==GET[key]){
@@ -49,6 +50,16 @@
                 }
             }
         }
+        if(DEBUG) {
+            console.log('CONTEXT:');
+            console.log(CONTEXT);
+        }
+
+    }
+
+    function replacement(){
+        if(DEBUG) console.log('replacement()');
+        // CONTEXT select
 
         // Parsing CONTEXT
         var map = config.map;
@@ -116,6 +127,14 @@
             }
         }
     }
+
+    PUBLIC.getDataKeys=function(){
+        var result=[];
+        for(k in DATA){
+            result.push(DATA[k][index]);
+        }
+        return result;
+    };
 
     PUBLIC.test=function(){
         if(!DEBUG) return false;
