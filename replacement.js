@@ -1,5 +1,5 @@
 ﻿var Replacement = (function(){
-    var DEBUG=true,
+    var DEBUG=false,
 	PUBLIC={},
     config={
         url:'data.json',
@@ -23,7 +23,7 @@
             DATA=response;
             save();
             findContext();
-            $(document).trigger('do-replacement');
+            $(document).trigger('Replacement.DataLoaded');
         });
     }
 
@@ -38,7 +38,7 @@
         if (DEBUG) console.log('Используем старые данные');
         DATA=JSON.parse(localStorage['replacement-data']);
         findContext();
-        $(document).trigger('do-replacement');
+        $(document).trigger('Replacement.DataLoaded');
     }
 
     function findContext(){
@@ -54,7 +54,6 @@
             console.log('CONTEXT:');
             console.log(CONTEXT);
         }
-
     }
 
     function replacement(){
@@ -66,9 +65,12 @@
         for(k in map){
             if(typeof CONTEXT[map[k]] == 'undefined') continue;
             if(config.skip_empty && CONTEXT[map[k]] == '') continue;
-            console.log(k+' : '+CONTEXT[map[k]]);
+            if(DEBUG) console.log(k+' : '+CONTEXT[map[k]]);
             $(k).html(CONTEXT[map[k]]);
         }
+        if(DEBUG) console.log('replacement() finish');
+
+        $(document).trigger('Replacement.done');
     }
 
     function parseGET (url){
@@ -151,7 +153,7 @@
     };
 
     PUBLIC.init = function(init_config) {
-        $(document).on('content-change do-replacement',replacement);
+        $(document).on('Replacement.DataLoaded',replacement);
         var need_refresh=false;
         if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
         config = $.extend({}, config, init_config);

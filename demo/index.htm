@@ -16,11 +16,33 @@
               <h1 id="replacement-header">Заголовок</h1>
               <p>Параграф текста со вставкой контактного телефона <span class="replacement-phone">+7(900) 876-54-32</span></p>
               <p>&nbsp;</p>
-              <div id="example">
-
-              </div>
+              <div id="example"></div>
+              <h3>Данные для подстановки в json формате</h3>
+              <pre>
+[
+  {
+    "code":"spb",
+    "city":"Санкт-Петербург",
+    "in_city":"в Санкт-Петербурге",
+    "phone":"+7(812) 123-45-67"
+  },
+  {
+    "code":"msk",
+    "city":"Москва",
+    "in_city":"в Москве",
+    "phone":"+7(499) 987-65-43"
+  },
+  {
+    "code":"nnov",
+    "city":"Нижний-Новгород",
+    "in_city":"в Нижнем-Новгороде",
+    "phone":""
+  }
+]
+              </pre>
               <footer>
-                  <strong class="replacement-phone">+7(900) 876-54-32</strong>
+                  <h3>Футер</h3>
+                  <p>Класс .replacement-phone <strong class="replacement-phone">+7(900) 876-54-32</strong></p>
               </footer>
           </div>
       </div>
@@ -29,6 +51,17 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script src="../replacement.js"></script>
     <script>
+        // Make demo links
+        $(document).on('Replacement.done',function(){
+            var keys=Replacement.getDataKeys();
+            var url=window.location.href.split('?')[0];
+            var output='<p><a href="'+url+'"> Без ключа (загружается запомненый ключ)</a></p>'+"\n";
+            for(k in keys){
+                output+='<p><a href="'+url+'?city='+keys[k]+'"> Ключ '+keys[k]+'</a></p>'+"\n";
+            }
+            $('#example').html(output);
+        });
+
         $(document).ready(function(){
             var config={
                 url:'data.json',
@@ -42,8 +75,6 @@
                 skip_empty: true
             };
             Replacement.init(config);
-
-
         });
     </script>
   </body>
