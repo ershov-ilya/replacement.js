@@ -86,6 +86,16 @@
         return (GET);
     };
 
+    function parseDependence(){
+        if(typeof config.dependence != 'undefined'){
+            var arr = config.dependence;
+            config.utm_keys=[];
+            for(k in arr){
+                config.utm_keys.push(k);
+            }
+        }
+    }
+
     PUBLIC.test=function(){
         if(!DEBUG) return false;
         console.log('config array:');
@@ -103,7 +113,7 @@
         var need_refresh=false;
         if(typeof $ == 'undefined') {console.error('Replacement needs a JQuery, but it\'s not found'); return false;}
         config = $.extend({}, config, init_config);
-
+        parseDependence();
         GET=parseGET();
         if($.isEmptyObject(GET)){
             // Load
