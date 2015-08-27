@@ -59,3 +59,33 @@ var config={
 ```
 Replacement.init(config);
 ```
+
+#MODX
+## MIGX TV-переменная
+Например **cities**
+
+### Вкладки формы
+```
+[
+  {
+    "caption":"Объект",
+    "fields": [
+      {"field":"code", "caption":"Код города"},
+      {"field":"city", "caption":"Город"},
+      {"field":"in_city", "caption":"Падеж: в городе"},
+      {"field":"phone", "caption":"Контактный телефон"}
+    ]
+  }
+]
+```
+
+### Разметка колонок
+```
+[
+  {"header": "Код города", "width": "50", "sortable": "true", "dataIndex": "code"},
+  {"header": "Город", "width": "50", "sortable": "true", "dataIndex": "city"},
+  {"header": "Падеж: в городе", "width": "50", "sortable": "true", "dataIndex": "in_city"},
+  {"header": "Контактный телефон", "width": "50", "sortable": "true", "dataIndex": "phone"}
+]
+```
+
