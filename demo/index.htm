@@ -64,14 +64,19 @@
 
         $(document).ready(function(){
             var config={
+                // URL для загрузки данных автозамен
                 url:'data.json',
+                // зависимость { get параметр : какое поле является индексом в json объектах }
                 dependence: {
                     'city' : 'code'
                 },
+                // Карта селектор JQuery : каким полем из json заменить
                 map:{
                     '#replacement-header' : 'in_city',
                     '.replacement-phone' : 'phone'
                 },
+                // Пропускать замены для полей json объекта с отсутствующими значениями
+                // Если false - будет вырезать содержимое тега с соответствующим селектором
                 skip_empty: true
             };
             Replacement.init(config);
