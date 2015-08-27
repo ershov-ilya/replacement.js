@@ -1,13 +1,15 @@
 ﻿var Replacement = (function(){
-    var DEBUG=true;
-	var PUBLIC={};
-    var config={
+    var DEBUG=true,
+	PUBLIC={},
+    config={
         url:'data.json',
         utm_keys:['city']
     };
 
-    var GET={};
-    var data={};
+    var GET={},
+    DATA={},
+    CONTEXT={},
+    key,index;
 
     function request(callback){
         if (DEBUG) console.log('Загружаем новые данные');
@@ -18,14 +20,14 @@
             if(DEBUG) console.log('parseAnswer()');
             if(typeof response == 'string') response=JSON.parse(response);
             if(DEBUG) console.log(response);
-            data=response;
+            DATA=response;
             save();
             $(document).trigger('do-replacement');
         });
     }
 
     function save(){
-        var str=JSON.stringify(data);
+        var str=JSON.stringify(DATA);
         localStorage['replacement-data']=str;
         var time=new Date().getTime();
         localStorage['replacement-time']=time;
@@ -33,12 +35,20 @@
 
     function load(){
         if (DEBUG) console.log('Используем старые данные');
-        data=JSON.parse(localStorage['replacement-data']);
+        DATA=JSON.parse(localStorage['replacement-data']);
         $(document).trigger('do-replacement');
     }
 
     function replacement(){
         if(DEBUG) console.log('replacement()');
+        // Выбор контекста
+        for(k in DATA){
+            if(typeof DATA[k][index] != 'undefined'){
+                if(DATA[k][index]==GET[key]){
+                    CONTEXT=DATA[k];
+                }
+            }
+        }
     }
 
     function parseGET (url){
@@ -92,6 +102,8 @@
             config.utm_keys=[];
             for(k in arr){
                 config.utm_keys.push(k);
+                key=k;
+                index=config.dependence[key];
             }
         }
     }
@@ -100,10 +112,12 @@
         if(!DEBUG) return false;
         console.log('config array:');
         console.log(config);
-        console.log('GET array:');
-        console.log(GET);
         console.log('utm_keys array:');
         console.log(utm_keys);
+        console.log('GET array:');
+        console.log(GET);
+        console.log('DATA array:');
+        console.log(DATA);
 
         return true;
     };
